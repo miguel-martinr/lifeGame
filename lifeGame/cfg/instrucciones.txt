@@ -1,0 +1,6 @@
+INSTRUCCIONES:
+  Seleccione la opción en el menú inicial
+  Indique dimensiones del TABLERO
+  Indique cuántas células vivas contendrá inicialmente
+  Indique las posiciones de dichas células
+  Indique el número de iteraciones
