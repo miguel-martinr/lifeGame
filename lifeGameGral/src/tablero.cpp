@@ -97,7 +97,7 @@ const cell* tablero::operator()(int i, int j) const {
 int tablero::contar(void) {
   for (int i = 1; i <= rows_; i++)
     for (int j = 1; j <= cols_; j++)
-      get(i,j)->contarVecinas(*this);
+      get(i,j)->contarVecinas(*this, i, j);
 
   return 0;
 }

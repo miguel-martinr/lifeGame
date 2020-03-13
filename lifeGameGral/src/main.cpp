@@ -23,6 +23,7 @@
 **********************************************************************/
 #include "../include/tablero.hpp"
 #include "../include/cell.hpp"
+#include "../include/cell_1.hpp"
 
 #include <iostream>
 #include <unistd.h>
@@ -44,55 +45,6 @@ int instrucciones(string path) {
   return 0;
 }
 
-// Pide patrón personalizado y lo ejecuta
-int custom(void) {
-  system("clear");
-  int m, n;
-  tablero* myTab;
-  cout << "   TABLERO" << endl;
-  cout << "     Filas    :"; cin >> m;
-  cout << "     Columnas :"; cin >> n;
-  int noCells;
-  myTab = new tablero(m,n);
-  cout << "Número de células vivas inicialmente: "; cin >> noCells;
-  int i, j;
-  for (int k = 0; k < noCells; k++) {
-    cout << "Célula [" << k << "]: " << endl
-         << "   Fila    :"; cin >> i;
-    cout << "   Columna : "; cin >> j;
-    cout << endl << endl;
-    (*myTab)(i,j)->setState(true);
-  }
-  int its;
-  cout << "Número de iteraciones: "; cin >> its;
-  cout << *myTab << endl;
-  getchar();
-  cout << "Presione una tecla para continuar" << endl;
-  getchar();
-  myTab->print(cout, its);
-  delete myTab;
-  return 0;
-}
-
-
-// Menú del juego
-int menu(void) {
-  cout << "   CONWAY'S GAME OF LIFE"  << endl << endl;
-
-  cout << "   1. Patrón personalizado" << endl << endl;;
-  cout << "   Cualquier otra tecla: salir" << endl << endl << endl;
-  int op;
-  cin >> op;
-  switch (op) {
-      case 1:
-        custom();
-        break;
-    default:
-      break;
-  }
-  return 0;
-}
-
 
 
 
@@ -102,5 +54,10 @@ int  main(int argc, char* argv[]) {
     return 0;
   }
 
-  return menu();
+  tablero A(5,5);
+  cout << A << endl;
+  cout << A(1,1)->isAlive() << endl;
+  cell_1 deriv(1,1);
+  cout << deriv.isAlive() << endl;
+  return 0;
 }

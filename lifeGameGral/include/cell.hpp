@@ -29,15 +29,17 @@ class tablero;
 class cell {
  public:
    //cell(void): i_(), j_(), state_(false), vecinas_(0) {}
-   cell(int i = 0, int j = 0): i_(i), j_(j), state_(false), vecinas_(0) {}
+   cell(int i = 0, int j = 0): i_(i), j_(j), vecinas_(0) {}
 
    //Setters
-   void setState(int state) { state_ = state; }
+//   void setState(int state) { state_ = state; }
    void setPos(int i, int j) { i_ = i, j_ = j; }
 
+   static cell* createCell(int id, int i, int j);
+
    //Getters
-   int getState(void) const { return state_; }
-   int isAlive(void) const { return getState(); }
+   virtual int getState(void) const { return 0; }
+   virtual bool isAlive(void) const { return false; }
    int getVecinas(void) const { return vecinas_; }
 
    // Print
@@ -45,15 +47,16 @@ class cell {
    friend ostream& operator<<(ostream& os, const cell& cl);
 
    // Contar vecinas
-   int contarVecinas(const tablero& tab);
+   //int contarVecinas(const tablero& tab);
+   int contarVecinas(const tablero& tab, int i, int j);
 
    // Actualizar
-   int update(void);
+   virtual int update(void);
 
 
  private:
    int i_;
    int j_;
-   int state_;
+//   int state_;
    int vecinas_;
 };
