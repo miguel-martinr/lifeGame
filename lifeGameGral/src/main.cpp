@@ -54,10 +54,26 @@ int  main(int argc, char* argv[]) {
     return 0;
   }
 
+  cell* ptr = new cell_1(2,1);
+  cout << ptr->get_i() << endl;
   tablero A(5,5);
+
+  A.setCell(new cell_1(1,1));
+  A.setCell(new cell_1(2,1));
+  A.setCell(new cell_1(3,1));
+  A.setCell(new cell_1(3,2));
+  A.setCell(new cell_1(3,3));
+  A.setCell(new cell_1(2,3));
   cout << A << endl;
-  cout << A(1,1)->isAlive() << endl;
-  cell_1 deriv(1,1);
-  cout << deriv.isAlive() << endl;
+  cout << A(2,2)->contarVecinas(A);
+  A.contar();
+  cout << "vecinas 2,2: " << A(2,2)->getVecinas() << endl;
+  cout << "update 2,2: " << A(2,2)->update() << endl;
+  A.actualizar();
+  cout << A << endl;
+  cout << A(1,2)->contarVecinas(A);
+  cout << "vecinas 1,2: " << A(1,2)->getVecinas() << endl;
+  cout << "update 1,2: " << A(1,2)->update() << endl;
+
   return 0;
 }

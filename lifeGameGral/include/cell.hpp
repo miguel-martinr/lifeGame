@@ -41,14 +41,17 @@ class cell {
    virtual int getState(void) const { return 0; }
    virtual bool isAlive(void) const { return false; }
    int getVecinas(void) const { return vecinas_; }
+   virtual int get_i(void) { return i_; }
+   virtual int get_j(void) { return j_; }
+
 
    // Print
-   ostream& print(ostream& os) const;
+   virtual ostream& print(ostream& os) const;
    friend ostream& operator<<(ostream& os, const cell& cl);
 
    // Contar vecinas
    //int contarVecinas(const tablero& tab);
-   int contarVecinas(const tablero& tab, int i, int j);
+   int contarVecinas(const tablero& tab);
 
    // Actualizar
    virtual int update(void);
@@ -57,6 +60,5 @@ class cell {
  private:
    int i_;
    int j_;
-//   int state_;
    int vecinas_;
 };

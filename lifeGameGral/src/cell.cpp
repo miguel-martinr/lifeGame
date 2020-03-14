@@ -21,12 +21,16 @@
 **********************************************************************/
 #include "../include/cell.hpp"
 #include "../include/cell_1.hpp"
+#include "../include/cell_2.hpp"
 #include "../include/tablero.hpp"
 
 cell* cell::createCell(int id, int i, int j) {
   switch (id) {
     case 1:
       return  new cell_1(i,j);
+    case 2:
+      return new cell_2(i,j);
+
     default:
       return new cell(i,j);
   }
@@ -42,11 +46,11 @@ ostream& cell::print(ostream& os) const {
   return os;
 }
 
-int cell::contarVecinas(const tablero& tab, int i, int j) {
+int cell::contarVecinas(const tablero& tab) {
   vecinas_ = 0;
-  for (int k = i - 1; k < i + 2; k++)
-    for (int l = j - 1; l < j + 2; l++)
-      if (!(k == i && l == j))
+  for (int i = i_ - 1; i < i_ + 2; i++)
+    for (int j = j_ - 1; j < j_ + 2; j++)
+      if (!(i == i_ && j == j_))
         vecinas_+= tab.get(i,j)->getState();
   return vecinas_;
 }
@@ -54,7 +58,7 @@ int cell::contarVecinas(const tablero& tab, int i, int j) {
 int cell::update(void) {
   if (vecinas_ == 3)
     return 1;
-  if (vecinas_ == 6)
+  if (vecinas_ == 6 || vecinas_ == 8)
     return 2;
   if (vecinas_ == 4)
     return 3;

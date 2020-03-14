@@ -93,20 +93,36 @@ const cell* tablero::operator()(int i, int j) const {
   return get(i,j);
 }
 
+int tablero::setCell(cell* newCell) {
+  assert(newCell != NULL);
+  int i = newCell->get_i(), j = newCell->get_j();
+  delete mat_[i][j];
+  mat_[i][j] = newCell;
+  return 0;
+}
+
 //Hace a cada célula actualizarse
 int tablero::contar(void) {
   for (int i = 1; i <= rows_; i++)
     for (int j = 1; j <= cols_; j++)
-      get(i,j)->contarVecinas(*this, i, j);
-
+      get(i,j)->contarVecinas(*this);
+/*
+  cout << endl;
+  for (int i = 1; i <= rows_; i++)
+    for (int j = 1; j <= cols_; j++)
+      cout << i << "--" << j << "--" << get(i,j)->getVecinas() << endl;
+*/
   return 0;
 }
 
 //Actualiza células
 int tablero::actualizar(void) {
   for (int i = 1; i <= rows_; i++)
-    for (int j = 1; j <= cols_; j++)
-      get(i,j)->update();
+    for (int j = 1; j <= cols_; j++) {
+      int id = get(i,j)->update();
+      if (get(i,j)->getState() != id)
+        setCell(cell::createCell(id, i, j));
+    }
   return 0;
 }
 
