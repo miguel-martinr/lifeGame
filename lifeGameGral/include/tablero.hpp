@@ -77,6 +77,8 @@ class tablero {
    //MODIFICACIÓN: retorna nº máximo de vecinas
    int maxVecinas(void) const;
 
+   //Leer tablero
+   int readFrom(istream& is);
 
  private:
    int rows_;

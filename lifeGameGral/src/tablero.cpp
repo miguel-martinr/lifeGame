@@ -101,17 +101,12 @@ int tablero::setCell(cell* newCell) {
   return 0;
 }
 
-//Hace a cada célula actualizarse
+//Hace a cada célula contar sus vecinas
 int tablero::contar(void) {
   for (int i = 1; i <= rows_; i++)
     for (int j = 1; j <= cols_; j++)
       get(i,j)->contarVecinas(*this);
-/*
-  cout << endl;
-  for (int i = 1; i <= rows_; i++)
-    for (int j = 1; j <= cols_; j++)
-      cout << i << "--" << j << "--" << get(i,j)->getVecinas() << endl;
-*/
+
   return 0;
 }
 
@@ -152,7 +147,7 @@ tablero& tablero::operator=(const tablero& tab) {
   create();
   for (int i = 0; i < rows_+2; i++)
     for (int j = 0; j < cols_+2; j++)
-      *(get(i,j)) = *(tab.get(i,j));
+      setCell(cell::createCell(tab.get(i,j)->getState(), i, j));
   return *this;
 }
 
@@ -190,4 +185,19 @@ int tablero::maxVecinas(void) const {
     for (int j = 1; j <= rows_+1; j++)
       maxV > get(i,j)->getVecinas() ? true : maxV = get(i,j)->getVecinas();
   return maxV;
+}
+
+//Leer tablero
+int tablero::readFrom(istream& is) {
+  int n,m,id;
+  is >> n >> m;
+  tablero aux(n,m);
+  for (int i = 1; i <= n; i++)
+    for (int j = 1; j <= m; j++) {
+      is >> id;
+      //cout << "id: " << id << endl;
+      aux.setCell(cell::createCell(id,i,j));
+    }
+  *this = aux;
+  return 0;
 }

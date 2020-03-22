@@ -49,31 +49,21 @@ int instrucciones(string path) {
 
 
 int  main(int argc, char* argv[]) {
-  if (argc > 1) {
+  if (argc > 2) {
     instrucciones("cfg/instrucciones.txt");
     return 0;
   }
 
-  cell* ptr = new cell_1(2,1);
-  cout << ptr->get_i() << endl;
-  tablero A(5,5);
-
-  A.setCell(new cell_1(1,1));
-  A.setCell(new cell_1(2,1));
-  A.setCell(new cell_1(3,1));
-  A.setCell(new cell_1(3,2));
-  A.setCell(new cell_1(3,3));
-  A.setCell(new cell_1(2,3));
-  cout << A << endl;
-  cout << A(2,2)->contarVecinas(A);
-  A.contar();
-  cout << "vecinas 2,2: " << A(2,2)->getVecinas() << endl;
-  cout << "update 2,2: " << A(2,2)->update() << endl;
-  A.actualizar();
-  cout << A << endl;
-  cout << A(1,2)->contarVecinas(A);
-  cout << "vecinas 1,2: " << A(1,2)->getVecinas() << endl;
-  cout << "update 1,2: " << A(1,2)->update() << endl;
+  ifstream fileIn(argv[1], ios::in);
+  tablero myTab;
+  myTab.readFrom(fileIn);
+  fileIn.close();
+  cout << myTab << endl;
+  for (int i = 0; i < 5; i++) {
+    cout << "Turno: " << i << endl;
+    cout << myTab << endl;
+    myTab.turno();
+  }
 
   return 0;
 }

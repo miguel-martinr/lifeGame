@@ -22,6 +22,7 @@
 #include "../include/cell.hpp"
 #include "../include/cell_1.hpp"
 #include "../include/cell_2.hpp"
+#include "../include/cell_3.hpp"
 #include "../include/tablero.hpp"
 
 cell* cell::createCell(int id, int i, int j) {
@@ -30,7 +31,8 @@ cell* cell::createCell(int id, int i, int j) {
       return  new cell_1(i,j);
     case 2:
       return new cell_2(i,j);
-
+    case 3:
+      return new cell_3(i,j);
     default:
       return new cell(i,j);
   }
@@ -51,7 +53,7 @@ int cell::contarVecinas(const tablero& tab) {
   for (int i = i_ - 1; i < i_ + 2; i++)
     for (int j = j_ - 1; j < j_ + 2; j++)
       if (!(i == i_ && j == j_))
-        vecinas_+= tab.get(i,j)->getState();
+        vecinas_+= tab.get(i,j)->isAlive();
   return vecinas_;
 }
 

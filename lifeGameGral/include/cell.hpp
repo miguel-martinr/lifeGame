@@ -30,7 +30,7 @@ class cell {
  public:
    //cell(void): i_(), j_(), state_(false), vecinas_(0) {}
    cell(int i = 0, int j = 0): i_(i), j_(j), vecinas_(0) {}
-
+  // virtual ~cell(void) {} // Segfault cuando descomento
    //Setters
 //   void setState(int state) { state_ = state; }
    void setPos(int i, int j) { i_ = i, j_ = j; }
@@ -39,7 +39,7 @@ class cell {
 
    //Getters
    virtual int getState(void) const { return 0; }
-   virtual bool isAlive(void) const { return false; }
+   virtual bool isAlive(void) const { return getState(); }
    int getVecinas(void) const { return vecinas_; }
    virtual int get_i(void) { return i_; }
    virtual int get_j(void) { return j_; }
