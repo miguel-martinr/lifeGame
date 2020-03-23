@@ -3,7 +3,7 @@
 
 int cell_2::update(void) {
   if (getVecinas() == 2 || getVecinas() == 4 || getVecinas() == 5)
-   return 2;
+    return 2;
   return 0;
 }
 

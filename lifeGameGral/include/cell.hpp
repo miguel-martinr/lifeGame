@@ -31,18 +31,19 @@ class cell {
    //cell(void): i_(), j_(), state_(false), vecinas_(0) {}
    cell(int i = 0, int j = 0): i_(i), j_(j), vecinas_(0) {}
   // virtual ~cell(void) {} // Segfault cuando descomento
-   //Setters
-//   void setState(int state) { state_ = state; }
-   void setPos(int i, int j) { i_ = i, j_ = j; }
 
-   static cell* createCell(int id, int i, int j);
+  //Devuelve puntero a cell de tipo acorde a id inicializando i,j
+  static cell* createCell(int id, int i, int j);
+
+   //Setters
+   void setPos(int i, int j) { i_ = i, j_ = j; }
 
    //Getters
    virtual int getState(void) const { return 0; }
    virtual bool isAlive(void) const { return getState(); }
    int getVecinas(void) const { return vecinas_; }
-   virtual int get_i(void) { return i_; }
-   virtual int get_j(void) { return j_; }
+   int get_i(void) { return i_; }
+   int get_j(void) { return j_; }
 
 
    // Print

@@ -56,14 +56,18 @@ int  main(int argc, char* argv[]) {
 
   ifstream fileIn(argv[1], ios::in);
   tablero myTab;
+
   myTab.readFrom(fileIn);
   fileIn.close();
   cout << myTab << endl;
-  for (int i = 0; i < 5; i++) {
-    cout << "Turno: " << i << endl;
-    cout << myTab << endl;
-    myTab.turno();
-  }
+
+
+for (int i = 0; i < 5; i++) {
+  cout << "Turno: " << i << endl;
+  cout << myTab << endl;
+  myTab.turno();
+}
+
 
   return 0;
 }

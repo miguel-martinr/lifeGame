@@ -93,6 +93,7 @@ const cell* tablero::operator()(int i, int j) const {
   return get(i,j);
 }
 
+// Reemplaza una cell por otra
 int tablero::setCell(cell* newCell) {
   assert(newCell != NULL);
   int i = newCell->get_i(), j = newCell->get_j();
@@ -148,6 +149,7 @@ tablero& tablero::operator=(const tablero& tab) {
   for (int i = 0; i < rows_+2; i++)
     for (int j = 0; j < cols_+2; j++)
       setCell(cell::createCell(tab.get(i,j)->getState(), i, j));
+
   return *this;
 }
 
@@ -189,14 +191,15 @@ int tablero::maxVecinas(void) const {
 
 //Leer tablero
 int tablero::readFrom(istream& is) {
-  int n,m,id;
+  int n,m;
+  char id;
   is >> n >> m;
   tablero aux(n,m);
   for (int i = 1; i <= n; i++)
     for (int j = 1; j <= m; j++) {
       is >> id;
-      //cout << "id: " << id << endl;
-      aux.setCell(cell::createCell(id,i,j));
+      //cout << "id: " << id << " # " << i << " " << j << endl;
+      aux.setCell(cell::createCell(id - '0',i,j));
     }
   *this = aux;
   return 0;
