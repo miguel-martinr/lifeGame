@@ -54,20 +54,28 @@ int  main(int argc, char* argv[]) {
     return 0;
   }
 
-  ifstream fileIn(argv[1], ios::in);
+  cout << endl << "Juego de la vida Generalizado" << endl << endl;
+
   tablero myTab;
+  if (argc == 2) {
+    ifstream fileIn(argv[1], ios::in);
+    if (!fileIn.is_open()) {
+      cout << endl << "Fallo al abrir el fichero!" << endl;
+      return -1;
+    }
+    myTab.readFrom(fileIn);
+    fileIn.close();
+  } else {
+    int rows,cols,cant;
+    cout << "Filas del tablero: "; cin >> rows;
+    cout << "Columnas del tablero: "; cin >> cols;
+    cout << "Número de células: "; cin >> cant;
+    myTab.resize(rows,cols);
+    myTab.input(cant);
+  }
 
-  myTab.readFrom(fileIn);
-  fileIn.close();
   cout << myTab << endl;
-
-
-for (int i = 0; i < 5; i++) {
-  cout << "Turno: " << i << endl;
-  cout << myTab << endl;
-  myTab.turno();
-}
-
+  myTab.print(cout, 80);
 
   return 0;
 }

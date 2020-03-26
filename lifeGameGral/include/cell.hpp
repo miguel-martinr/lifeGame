@@ -1,5 +1,5 @@
 /**********************************************************************
-* Project           : Conway's Game of Life
+* Project           : Conway's Game of Life (generalized, polymorphism)
 *
 * Class             : cell (célula) definition
 *
@@ -28,9 +28,9 @@ class tablero;
 
 class cell {
  public:
-   //cell(void): i_(), j_(), state_(false), vecinas_(0) {}
+
    cell(int i = 0, int j = 0): i_(i), j_(j), vecinas_(0) {}
-  // virtual ~cell(void) {} // Segfault cuando descomento
+   ~cell(void) {}
 
   //Devuelve puntero a cell de tipo acorde a id inicializando i,j
   static cell* createCell(int id, int i, int j);
@@ -41,7 +41,7 @@ class cell {
    //Getters
    virtual int getState(void) const { return 0; }
    virtual bool isAlive(void) const { return getState(); }
-   int getVecinas(void) const { return vecinas_; }
+   virtual int getVecinas(void) const { return vecinas_; }
    int get_i(void) { return i_; }
    int get_j(void) { return j_; }
 
@@ -51,8 +51,7 @@ class cell {
    friend ostream& operator<<(ostream& os, const cell& cl);
 
    // Contar vecinas
-   //int contarVecinas(const tablero& tab);
-   int contarVecinas(const tablero& tab);
+   virtual int contarVecinas(const tablero& tab);
 
    // Actualizar
    virtual int update(void);

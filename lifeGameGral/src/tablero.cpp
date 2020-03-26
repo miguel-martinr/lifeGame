@@ -105,8 +105,9 @@ int tablero::setCell(cell* newCell) {
 //Hace a cada célula contar sus vecinas
 int tablero::contar(void) {
   for (int i = 1; i <= rows_; i++)
-    for (int j = 1; j <= cols_; j++)
+    for (int j = 1; j <= cols_; j++) {
       get(i,j)->contarVecinas(*this);
+    }
 
   return 0;
 }
@@ -167,8 +168,8 @@ ostream&  tablero::print(ostream& os) const{
 ostream& tablero::print(ostream& os, int it) {
   for (int i = 0; i < it; i++) {
     turno();
-    os << "Turno: " << i+1 << std::endl;
-    os << "Nº máx de vecinas: " << maxVecinas() << std::endl;
+    os << "Turno: " << i+1 << endl;
+    os << "Población: " << getPop() << endl;
     os << *this << std::endl;
     usleep(200000);
   }
@@ -180,13 +181,13 @@ ostream& operator<<(ostream& os, const tablero& tab) {
   return os;
 }
 
-//MODIFICACIÓN: retorna nº máximo de vecinas
-int tablero::maxVecinas(void) const {
-  int maxV = get(1,1)->getVecinas();
-  for (int i = 1; i <= rows_+1; i++)
-    for (int j = 1; j <= rows_+1; j++)
-      maxV > get(i,j)->getVecinas() ? true : maxV = get(i,j)->getVecinas();
-  return maxV;
+//Devuelve el nº de células vivas
+int tablero::getPop(void) {
+  int pop = 0;
+  for (int i = 1; i <= rows_; i++)
+    for (int j = 1; j <= cols_; j++)
+        pop += get(i,j)->isAlive();
+  return pop;
 }
 
 //Leer tablero
@@ -198,9 +199,21 @@ int tablero::readFrom(istream& is) {
   for (int i = 1; i <= n; i++)
     for (int j = 1; j <= m; j++) {
       is >> id;
-      //cout << "id: " << id << " # " << i << " " << j << endl;
       aux.setCell(cell::createCell(id - '0',i,j));
     }
   *this = aux;
+  return 0;
+}
+
+int tablero::input(int cant) {
+  cout << "Introduzca el tipo de célula seguido de las coordenadas"
+       << "siguiendo el formato TIPO [ESPACIO] i [ESPACIO] j [ENTER]. \n"
+       << "Ejemplo: Célula 1: 2 1 5 \n\n";
+  int type,k,l;
+  for (int i = 0; i < cant; i++) {
+    cout << "Célula " << i+1 << ": ";
+    cin >> type >> k >> l;
+    setCell(cell::createCell(type, k, l));
+  }
   return 0;
 }
