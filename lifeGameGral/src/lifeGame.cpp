@@ -23,7 +23,7 @@
 **********************************************************************/
 #include "../include/tablero.hpp"
 #include "../include/cell.hpp"
-#include "../include/cell_1.hpp"
+#include "../include/cell_edgeH.hpp"
 
 #include <iostream>
 #include <unistd.h>
@@ -75,7 +75,9 @@ int  main(int argc, char* argv[]) {
   }
 
   cout << myTab << endl;
-  myTab.print(cout, 80);
+  int it;
+  cout << "Número de iteraciones: "; cin >> it;
+  myTab.print(cout, it);
 
   return 0;
 }

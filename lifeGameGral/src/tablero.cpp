@@ -21,6 +21,7 @@
 **********************************************************************/
 #include "../include/tablero.hpp"
 #include "../include/cell.hpp"
+#include "../include/cell_edgeH.hpp"
 
 #include <cassert>
 #include <unistd.h>
@@ -47,6 +48,16 @@ int tablero::create(void) {
     mat_[i] = new cell*[cols_+2];
     for (int j = 0; j < cols_+2; j++)
       mat_[i][j] = new cell(i,j);
+  }
+
+  for (int i = 0; i < cols_+2; i++) {
+    mat_[0][i] = cell::createCell(-1,0,i);
+    mat_[rows_+1][i] = cell::createCell(-1,rows_+1,i);
+  }
+
+  for (int i = 0; i < rows_+2;i++) {
+    mat_[i][0] = cell::createCell(-2,i,0);
+    mat_[i][cols_+1] = cell::createCell(-2,i,cols_+1);
   }
   return 0;
 }
@@ -157,8 +168,8 @@ tablero& tablero::operator=(const tablero& tab) {
 
 //Print
 ostream&  tablero::print(ostream& os) const{
-  for (int i = 1; i <= rows_; i++) {
-    for (int j = 1; j <= cols_; j++)
+  for (int i = 0; i < rows_+2; i++) {
+    for (int j = 0; j < cols_+2; j++)
       os << *(get(i,j));
     os << std::endl;
   }

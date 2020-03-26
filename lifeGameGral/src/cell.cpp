@@ -23,6 +23,8 @@
 #include "../include/cell_1.hpp"
 #include "../include/cell_2.hpp"
 #include "../include/cell_3.hpp"
+#include "../include/cell_edgeH.hpp"
+#include "../include/cell_edgeV.hpp"
 #include "../include/tablero.hpp"
 
 cell* cell::createCell(int id, int i, int j) {
@@ -33,6 +35,11 @@ cell* cell::createCell(int id, int i, int j) {
       return new cell_2(i,j);
     case 3:
       return new cell_3(i,j);
+    case -1:
+      return new cell_edgeH(i,j);
+    case -2:
+      return new cell_edgeV(i,j);
+
     default:
       return new cell(i,j);
   }
@@ -44,16 +51,24 @@ ostream& operator<<(ostream& os, const cell& cl) {
 }
 
 ostream& cell::print(ostream& os) const {
-  os << '-';
+  os << ' ';
   return os;
 }
 
 int cell::contarVecinas(const tablero& tab) {
   vecinas_ = 0;
-  for (int i = i_ - 1; i < i_ + 2; i++)
-    for (int j = j_ - 1; j < j_ + 2; j++)
-      if (!(i == i_ && j == j_))
-        vecinas_+= tab.get(i,j)->isAlive();
+  /*  for (int i = i_ - 1; i < i_ + 2; i++)
+      for (int j = j_ - 1; j < j_ + 2; j++)
+        if (!(i == i_ && j == j_))
+          vecinas_+= tab.get(i,j)->isAlive();
+  */
+
+  //MODIFICACIÓN: Contar vecinas que forman una +
+    vecinas_ += tab.get(i_-1,j_)->isAlive(); //Top
+    vecinas_ += tab.get(i_+1,j_)->isAlive(); //Down
+    vecinas_ += tab.get(i_,j_-1)->isAlive(); //Left
+    vecinas_ += tab.get(i_,j_+1)->isAlive(); //Right
+      
   return vecinas_;
 }
 
