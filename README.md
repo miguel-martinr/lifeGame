@@ -1,2 +1,2 @@
 # lifeGame
-Juego de la vida generalizado, sin bordes. Polimorfismo
+Juego de la vida generalizado, tablero sin bordes. Polimorfismo
