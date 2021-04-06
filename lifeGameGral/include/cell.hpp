@@ -1,5 +1,5 @@
 /**********************************************************************
-* Project           : Conway's Game of Life
+* Project           : Conway's Game of Life (generalized, polymorphism)
 *
 * Class             : cell (célula) definition
 *
@@ -28,32 +28,37 @@ class tablero;
 
 class cell {
  public:
-   //cell(void): i_(), j_(), state_(false), vecinas_(0) {}
-   cell(int i = 0, int j = 0): i_(i), j_(j), state_(false), vecinas_(0) {}
+
+   cell(int i = 0, int j = 0): i_(i), j_(j), vecinas_(0) {}
+   ~cell(void) {}
+
+  //Devuelve puntero a cell de tipo acorde a id inicializando i,j
+  static cell* createCell(int id, int i, int j);
 
    //Setters
-   void setState(int state) { state_ = state; }
    void setPos(int i, int j) { i_ = i, j_ = j; }
 
    //Getters
-   int getState(void) const { return state_; }
-   int isAlive(void) const { return getState(); }
-   int getVecinas(void) const { return vecinas_; }
+   virtual int getState(void) const { return 0; }
+   virtual bool isAlive(void) const { return getState(); }
+   virtual int getVecinas(void) const { return vecinas_; }
+   int get_i(void) { return i_; }
+   int get_j(void) { return j_; }
+
 
    // Print
-   ostream& print(ostream& os) const;
+   virtual ostream& print(ostream& os) const;
    friend ostream& operator<<(ostream& os, const cell& cl);
 
    // Contar vecinas
-   int contarVecinas(const tablero& tab);
+   virtual int contarVecinas(const tablero& tab);
 
    // Actualizar
-   int update(void);
+   virtual int update(void);
 
 
  private:
    int i_;
    int j_;
-   int state_;
    int vecinas_;
 };

@@ -1,2 +1,2 @@
 # lifeGame
-Algunas versiones del "Juego de la vida"
+Juego de la vida generalizado. Tablero con bordes, polimorfismo

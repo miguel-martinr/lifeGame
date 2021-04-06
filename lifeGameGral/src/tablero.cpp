@@ -21,6 +21,7 @@
 **********************************************************************/
 #include "../include/tablero.hpp"
 #include "../include/cell.hpp"
+#include "../include/cell_edgeH.hpp"
 
 #include <cassert>
 #include <unistd.h>
@@ -47,6 +48,16 @@ int tablero::create(void) {
     mat_[i] = new cell*[cols_+2];
     for (int j = 0; j < cols_+2; j++)
       mat_[i][j] = new cell(i,j);
+  }
+
+  for (int i = 0; i < cols_+2; i++) {
+    mat_[0][i] = cell::createCell(-1,0,i);
+    mat_[rows_+1][i] = cell::createCell(-1,rows_+1,i);
+  }
+
+  for (int i = 0; i < rows_+2;i++) {
+    mat_[i][0] = cell::createCell(-2,i,0);
+    mat_[i][cols_+1] = cell::createCell(-2,i,cols_+1);
   }
   return 0;
 }
@@ -93,11 +104,21 @@ const cell* tablero::operator()(int i, int j) const {
   return get(i,j);
 }
 
-//Hace a cada célula actualizarse
+// Reemplaza una cell por otra
+int tablero::setCell(cell* newCell) {
+  assert(newCell != NULL);
+  int i = newCell->get_i(), j = newCell->get_j();
+  delete mat_[i][j];
+  mat_[i][j] = newCell;
+  return 0;
+}
+
+//Hace a cada célula contar sus vecinas
 int tablero::contar(void) {
   for (int i = 1; i <= rows_; i++)
-    for (int j = 1; j <= cols_; j++)
+    for (int j = 1; j <= cols_; j++) {
       get(i,j)->contarVecinas(*this);
+    }
 
   return 0;
 }
@@ -105,8 +126,11 @@ int tablero::contar(void) {
 //Actualiza células
 int tablero::actualizar(void) {
   for (int i = 1; i <= rows_; i++)
-    for (int j = 1; j <= cols_; j++)
-      get(i,j)->update();
+    for (int j = 1; j <= cols_; j++) {
+      int id = get(i,j)->update();
+      if (get(i,j)->getState() != id)
+        setCell(cell::createCell(id, i, j));
+    }
   return 0;
 }
 
@@ -136,15 +160,16 @@ tablero& tablero::operator=(const tablero& tab) {
   create();
   for (int i = 0; i < rows_+2; i++)
     for (int j = 0; j < cols_+2; j++)
-      *(get(i,j)) = *(tab.get(i,j));
+      setCell(cell::createCell(tab.get(i,j)->getState(), i, j));
+
   return *this;
 }
 
 
 //Print
 ostream&  tablero::print(ostream& os) const{
-  for (int i = 1; i <= rows_; i++) {
-    for (int j = 1; j <= cols_; j++)
+  for (int i = 0; i < rows_+2; i++) {
+    for (int j = 0; j < cols_+2; j++)
       os << *(get(i,j));
     os << std::endl;
   }
@@ -154,8 +179,8 @@ ostream&  tablero::print(ostream& os) const{
 ostream& tablero::print(ostream& os, int it) {
   for (int i = 0; i < it; i++) {
     turno();
-    os << "Turno: " << i+1 << std::endl;
-    os << "Nº máx de vecinas: " << maxVecinas() << std::endl;
+    os << "Turno: " << i+1 << endl;
+    os << "Población: " << getPop() << endl;
     os << *this << std::endl;
     usleep(200000);
   }
@@ -167,11 +192,39 @@ ostream& operator<<(ostream& os, const tablero& tab) {
   return os;
 }
 
-//MODIFICACIÓN: retorna nº máximo de vecinas
-int tablero::maxVecinas(void) const {
-  int maxV = get(1,1)->getVecinas();
-  for (int i = 1; i <= rows_+1; i++)
-    for (int j = 1; j <= rows_+1; j++)
-      maxV > get(i,j)->getVecinas() ? true : maxV = get(i,j)->getVecinas();
-  return maxV;
+//Devuelve el nº de células vivas
+int tablero::getPop(void) {
+  int pop = 0;
+  for (int i = 1; i <= rows_; i++)
+    for (int j = 1; j <= cols_; j++)
+        pop += get(i,j)->isAlive();
+  return pop;
+}
+
+//Leer tablero
+int tablero::readFrom(istream& is) {
+  int n,m;
+  char id;
+  is >> n >> m;
+  tablero aux(n,m);
+  for (int i = 1; i <= n; i++)
+    for (int j = 1; j <= m; j++) {
+      is >> id;
+      aux.setCell(cell::createCell(id - '0',i,j));
+    }
+  *this = aux;
+  return 0;
+}
+
+int tablero::input(int cant) {
+  cout << "Introduzca el tipo de célula seguido de las coordenadas"
+       << "siguiendo el formato TIPO [ESPACIO] i [ESPACIO] j [ENTER]. \n"
+       << "Ejemplo: Célula 1: 2 1 5 \n\n";
+  int type,k,l;
+  for (int i = 0; i < cant; i++) {
+    cout << "Célula " << i+1 << ": ";
+    cin >> type >> k >> l;
+    setCell(cell::createCell(type, k, l));
+  }
+  return 0;
 }

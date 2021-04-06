@@ -23,6 +23,7 @@
 **********************************************************************/
 #include "../include/tablero.hpp"
 #include "../include/cell.hpp"
+#include "../include/cell_edgeH.hpp"
 
 #include <iostream>
 #include <unistd.h>
@@ -44,63 +45,39 @@ int instrucciones(string path) {
   return 0;
 }
 
-// Pide patrón personalizado y lo ejecuta
-int custom(void) {
-  system("clear");
-  int m, n;
-  tablero* myTab;
-  cout << "   TABLERO" << endl;
-  cout << "     Filas    :"; cin >> m;
-  cout << "     Columnas :"; cin >> n;
-  int noCells;
-  myTab = new tablero(m,n);
-  cout << "Número de células vivas inicialmente: "; cin >> noCells;
-  int i, j;
-  for (int k = 0; k < noCells; k++) {
-    cout << "Célula [" << k << "]: " << endl
-         << "   Fila    :"; cin >> i;
-    cout << "   Columna : "; cin >> j;
-    cout << endl << endl;
-    (*myTab)(i,j)->setState(true);
-  }
-  int its;
-  cout << "Número de iteraciones: "; cin >> its;
-  cout << *myTab << endl;
-  getchar();
-  cout << "Presione una tecla para continuar" << endl;
-  getchar();
-  myTab->print(cout, its);
-  delete myTab;
-  return 0;
-}
-
-
-// Menú del juego
-int menu(void) {
-  cout << "   CONWAY'S GAME OF LIFE"  << endl << endl;
-
-  cout << "   1. Patrón personalizado" << endl << endl;;
-  cout << "   Cualquier otra tecla: salir" << endl << endl << endl;
-  int op;
-  cin >> op;
-  switch (op) {
-      case 1:
-        custom();
-        break;
-    default:
-      break;
-  }
-  return 0;
-}
-
 
 
 
 int  main(int argc, char* argv[]) {
-  if (argc > 1) {
+  if (argc > 2) {
     instrucciones("cfg/instrucciones.txt");
     return 0;
   }
 
-  return menu();
+  cout << endl << "Juego de la vida Generalizado" << endl << endl;
+
+  tablero myTab;
+  if (argc == 2) {
+    ifstream fileIn(argv[1], ios::in);
+    if (!fileIn.is_open()) {
+      cout << endl << "Fallo al abrir el fichero!" << endl;
+      return -1;
+    }
+    myTab.readFrom(fileIn);
+    fileIn.close();
+  } else {
+    int rows,cols,cant;
+    cout << "Filas del tablero: "; cin >> rows;
+    cout << "Columnas del tablero: "; cin >> cols;
+    cout << "Número de células: "; cin >> cant;
+    myTab.resize(rows,cols);
+    myTab.input(cant);
+  }
+
+  cout << myTab << endl;
+  int it;
+  cout << "Número de iteraciones: "; cin >> it;
+  myTab.print(cout, it);
+
+  return 0;
 }

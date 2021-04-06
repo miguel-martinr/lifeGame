@@ -52,7 +52,7 @@ class tablero {
    //Setters
    void setRows(int rows) { rows_ = rows; }
    void setCols(int cols) { cols_ = cols; }
-
+   int setCell(cell* newCell);
 
    //Cada célula cuenta a sus vecinas
    int contar(void);
@@ -74,12 +74,15 @@ class tablero {
    ostream& print(ostream& os = cout, int it = 1);
    friend ostream& operator<<(ostream& os, const tablero& tab);
 
-   //MODIFICACIÓN: retorna nº máximo de vecinas
-   int maxVecinas(void) const;
-
-
+   //Leer tablero
+   int readFrom(istream& is);
+   int input(int cant);
+   
+   //Devuelve el nº de células vivas
+   int getPop(void);
  private:
    int rows_;
    int cols_;
    matT mat_;
+
 };
